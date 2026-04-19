@@ -14,34 +14,37 @@ function MyNav({ searchTerm, setSearchTerm }) {
         window.location.reload()
     }
 
+    const handleClearSearch = () => {
+        setSearchTerm("")
+    }
+
     return (
         <Navbar className="my-navbar">
             <Container>
-                <Navbar.Brand
-                    as={Link}
-                    to="/"
-                    className="brand-navbar"
-                >
+                <Navbar.Brand as={Link} to="/" className="brand-navbar">
                     Strive Blog
                 </Navbar.Brand>
 
                 <Nav className="me-auto">
-                    <Nav.Link
-                        as={Link}
-                        to="/"
-                        className="link-navbar"
-                    >
+                    <Nav.Link as={Link} to="/" className="link-navbar">
                         Home
                     </Nav.Link>
                 </Nav>
 
-                <InputGroup style={{ maxWidth: "260px" }}>
+                <InputGroup style={{ maxWidth: "320px" }}>
                     <Form.Control
                         placeholder="Cerca un Post..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <Button variant="light">
+
+                    {searchTerm && (
+                        <Button variant="light" onClick={handleClearSearch}>
+                            <i className="bi bi-x-lg"></i>
+                        </Button>
+                    )}
+
+                    <Button variant="light" disabled>
                         <i className="bi bi-search"></i>
                     </Button>
                 </InputGroup>
@@ -60,11 +63,7 @@ function MyNav({ searchTerm, setSearchTerm }) {
                     )}
 
                     {localStorage.getItem("token") && (
-                        <Button
-                            variant="light"
-                            size="sm"
-                            onClick={handleLogout}
-                        >
+                        <Button variant="light" size="sm" onClick={handleLogout}>
                             Logout
                         </Button>
                     )}

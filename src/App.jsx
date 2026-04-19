@@ -14,24 +14,25 @@ function App() {
   const [totalPages, setTotalPages] = useState(1)
   const [searchTerm, setSearchTerm] = useState("")
 
-  const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.content.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const fetchPosts = async (page = 1, search = "") => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/blogPosts?page=${page}&search=${search}`
+      )
 
-  const fetchPosts = async (page = 1) => {
-    const response = await fetch(`http://localhost:3000/blogPosts?page=${page}`)
-    const data = await response.json()
+      const data = await response.json()
 
-    setPosts(data.blogPosts)
-    setCurrentPage(data.currentPage)
-    setTotalPages(data.totalPages)
+      setPosts(data.blogPosts)
+      setCurrentPage(data.currentPage)
+      setTotalPages(data.totalPages)
+    } catch (error) {
+      console.log("Errore caricamento post:", error)
+    }
   }
 
   useEffect(() => {
-    fetchPosts()
-  }, [])
+    fetchPosts(1, searchTerm)
+  }, [searchTerm])
 
   return (
     <BrowserRouter>
@@ -42,7 +43,7 @@ function App() {
           path="/"
           element={
             <Home
-              posts={filteredPosts}
+              posts={posts}
               setPosts={setPosts}
               currentPage={currentPage}
               totalPages={totalPages}
@@ -50,7 +51,12 @@ function App() {
             />
           }
         />
-        <Route path="/post/:id" element={<PostDetail posts={posts} />} />
+
+        <Route
+          path="/post/:id"
+          element={<PostDetail posts={posts} />}
+        />
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>

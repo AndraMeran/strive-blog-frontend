@@ -59,7 +59,7 @@ function AllBlogPosts({ posts, setPosts, currentPage, totalPages, fetchPosts }) 
                                 <SingleBlogPost key={post._id} post={post} setPosts={setPosts} />
                             ))
                         ) : (
-                            <p>Nessun post disponibile</p>
+                            <p className="text-muted text-center">Post non trovato</p>
                         )}
                     </Row>
 
