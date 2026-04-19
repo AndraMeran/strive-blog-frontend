@@ -1,17 +1,22 @@
 
 import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
+import { Container, Row, Col, Card, Button } from "react-bootstrap"
+import { useNavigate } from "react-router-dom"
 import CommentArea from "../components/CommentArea"
-import { Container, Card, Row, Col } from "react-bootstrap"
 
 function PostDetail({ posts }) {
     const { id } = useParams()
     const [post, setPost] = useState(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
-        const selectedPost = posts.find((singlePost) => String(singlePost._id) === String(id))
+        const selectedPost = posts.find(
+            (singlePost) => String(singlePost._id) === String(id)
+        )
         setPost(selectedPost)
     }, [id, posts])
+
     if (!post) {
         return (
             <Container className="py-4">
@@ -20,13 +25,19 @@ function PostDetail({ posts }) {
         )
     }
 
-
     return (
-
 
         <Container className="py-4">
             <Row className="justify-content-center">
                 <Col md={10} lg={8}>
+                    <Button
+                        variant="outline-secondary"
+                        size="sm"
+                        className="mb-3"
+                        onClick={() => navigate(-1)}
+                    >
+                        ← Indietro
+                    </Button>
                     <Card className="shadow-sm border-0">
                         <Card.Img
                             variant="top"
@@ -44,29 +55,28 @@ function PostDetail({ posts }) {
                                     Tempo di lettura: {post.readTime?.value} {post.readTime?.unit}
                                 </span>
 
-                                {post.author && (
-                                    <span>
-                                        Autore: {post.author.firstName} {post.author.lastName}
-                                    </span>
-                                )}
+
                             </div>
 
-                            {post.author?.avatar && (
-                                <div className="d-flex align-items-center gap-2 mb-4">
+                            {(post.author || post.authorAvatar) && (
+                                <div className="author-box mb-4">
                                     <img
-                                        src={post.author.avatar}
-                                        alt={`${post.author.firstName} ${post.author.lastName}`}
-                                        style={{
-                                            width: "40px",
-                                            height: "40px",
-                                            borderRadius: "50%",
-                                            objectFit: "cover"
-                                        }}
+                                        src={post.authorAvatar || "https://via.placeholder.com/50"}
+                                        alt={post.author || "author"}
+                                        className="author-avatar"
                                     />
-                                    <span>
-                                        {post.author.firstName} {post.author.lastName}
-                                    </span>
+                                    <div>
+                                        <p className="author-label">Autore</p>
+                                        <p className="author-name">{post.author}</p>
+                                    </div>
                                 </div>
+                            )}
+
+                            {post.updatedAt && (
+                                <p className="last-update mb-4">
+                                    Ultima modifica:{" "}
+                                    {new Date(post.updatedAt).toLocaleString("it-IT")}
+                                </p>
                             )}
 
                             <Card.Text style={{ lineHeight: "1.8" }}>

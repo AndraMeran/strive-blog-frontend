@@ -33,12 +33,14 @@ function Login() {
             })
 
             const data = await response.json()
+            console.log(data)
 
             if (!response.ok) {
                 throw new Error(data.message || "Errore nel login")
             }
 
             localStorage.setItem("token", data.token)
+            localStorage.setItem("isAdmin", data.isAdmin)
 
             setMessage("Login effettuato!")
 
