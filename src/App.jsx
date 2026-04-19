@@ -7,6 +7,7 @@ import PostDetail from "./pages/PostDetail"
 import './App.css'
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import LoginSuccess from "./pages/LoginSuccess"
 
 function App() {
   const [posts, setPosts] = useState([])
@@ -59,6 +60,7 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/login-success" element={<LoginSuccess />} />
       </Routes>
 
       <MyFooter />

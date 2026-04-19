@@ -1,10 +1,7 @@
 import { useState } from "react"
 import { Container, Form, Button, Card } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
 
 function Login() {
-    const navigate = useNavigate()
-
     const [loginData, setLoginData] = useState({
         email: "",
         password: ""
@@ -21,7 +18,6 @@ function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log("DATI LOGIN INVIATI:", loginData)
 
         try {
             const response = await fetch("http://localhost:3000/auth/login", {
@@ -46,12 +42,14 @@ function Login() {
 
             setTimeout(() => {
                 window.location.href = "/"
-                // setMessage("")
-                // navigate("/")
             }, 1500)
         } catch (error) {
             setMessage(error.message)
         }
+    }
+
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:3000/auth/google"
     }
 
     return (
@@ -86,6 +84,15 @@ function Login() {
 
                     <Button type="submit" variant="primary" className="w-100">
                         Accedi
+                    </Button>
+
+                    <Button
+                        type="button"
+                        variant="danger"
+                        className="w-100 mt-3"
+                        onClick={handleGoogleLogin}
+                    >
+                        Continua con Google
                     </Button>
                 </Form>
             </Card>

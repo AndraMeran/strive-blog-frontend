@@ -3,12 +3,12 @@ import { Container, Form, Button, Card } from "react-bootstrap"
 
 function Register() {
     const [registerData, setRegisterData] = useState({
-        email: "",
-        password: "",
-        surname: "",
         name: "",
+        surname: "",
+        email: "",
         birthDate: "",
-        avatar: ""
+        avatar: "",
+        password: ""
     })
 
     const [message, setMessage] = useState("")
@@ -22,8 +22,6 @@ function Register() {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log("DATI REGISTER INVIATI:", registerData)
-
 
         try {
             const response = await fetch("http://localhost:3000/auth/register", {
@@ -35,13 +33,13 @@ function Register() {
             })
 
             const data = await response.json()
-            console.log("RISPOSTA REGISTER:", data)
 
             if (!response.ok) {
                 throw new Error(data.message || "Errore nella registrazione")
             }
 
             localStorage.setItem("token", data.token)
+            localStorage.setItem("isAdmin", data.isAdmin)
 
             setMessage("Registrazione completata!")
 
@@ -53,10 +51,14 @@ function Register() {
         }
     }
 
+    const handleGoogleRegister = () => {
+        window.location.href = "http://localhost:3000/auth/google"
+    }
+
     return (
         <Container className="py-4 d-flex justify-content-center">
             <Card className="shadow-sm p-4" style={{ width: "100%", maxWidth: "500px" }}>
-                <h2 className="mb-4 text-center">Register</h2>
+                <h2 className="mb-4 text-center">Registrati</h2>
 
                 {message && <div className="alert alert-info text-center">{message}</div>}
 
@@ -68,6 +70,7 @@ function Register() {
                             name="name"
                             value={registerData.name}
                             onChange={handleChange}
+                            required
                         />
                     </Form.Group>
 
@@ -78,6 +81,18 @@ function Register() {
                             name="surname"
                             value={registerData.surname}
                             onChange={handleChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            type="email"
+                            name="email"
+                            value={registerData.email}
+                            onChange={handleChange}
+                            required
                         />
                     </Form.Group>
 
@@ -102,17 +117,6 @@ function Register() {
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            name="email"
-                            value={registerData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                             type="password"
@@ -123,8 +127,17 @@ function Register() {
                         />
                     </Form.Group>
 
-                    <Button type="submit" variant="dark" className="w-100">
+                    <Button type="submit" variant="primary" className="w-100">
                         Registrati
+                    </Button>
+
+                    <Button
+                        type="button"
+                        variant="danger"
+                        className="w-100 mt-3"
+                        onClick={handleGoogleRegister}
+                    >
+                        Registrati con Google
                     </Button>
                 </Form>
             </Card>
