@@ -49,7 +49,11 @@ function CommentArea({ postId }) {
                 )}
             </div>
 
-            <AddComment postId={postId} setComments={setComments} />
+            {localStorage.getItem("token") ? (
+                <AddComment postId={postId} setComments={setComments} />
+            ) : (
+                <p className="text-muted">Effettua il login per commentare</p>
+            )}
         </div>
     )
 }

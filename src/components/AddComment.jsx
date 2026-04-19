@@ -8,23 +8,28 @@ function AddComment({ postId, setComments }) {
     const handleSubmit = async (event) => {
         event.preventDefault()
 
+        const token = localStorage.getItem("token")
+
         const newComment = {
-            text: commentText,
-            author: "Utente"
+            text: commentText
         }
 
         try {
             const response = await fetch(`http://localhost:3000/posts/${postId}/comments`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(newComment)
             })
 
+            if (!response.ok) {
+                throw new Error("Errore nella creazione del commento")
+            }
+
             const createdComment = await response.json()
 
-            // aggiorna UI con commento vero dal backend
             setComments((prevComments) => [createdComment, ...prevComments])
 
             setSuccessMessage("Commento aggiunto!")
@@ -34,7 +39,6 @@ function AddComment({ postId, setComments }) {
             }, 3000)
 
             setCommentText("")
-
         } catch (error) {
             console.log("Errore:", error)
         }
