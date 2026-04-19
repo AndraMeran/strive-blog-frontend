@@ -70,3 +70,22 @@
     transform: translateY(-1px);
     text-shadow: 0 2px 8px rgba(255, 255, 255, 0.35);
 }
+
+.sidebar-box {
+    background: linear-gradient(180deg, #ffffff, #f8f9ff);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 20px;
+}
+
+.sidebar-list {
+    padding-left: 18px;
+    margin: 0;
+}
+
+.sidebar-list li {
+    margin-bottom: 8px;
+    color: #555;
+}
